@@ -9,11 +9,14 @@ public class ComputerPlayer implements Player {
 	int playerFlag = 2; // danh dau la computer player
 	int _x, _y; // toa do nuoc di
 
-	public static int maxDepth = 15; // do sau toi da 
-	public static int maxMove = 3; // so nut con duyet qua toi da
-
-	public int[] DScore = { 0, 1, 9, 81, 729 ,6561 ,59049};  // Mang diem phong ngu
-	public int[] AScore = {0, 2, 18, 162 , 1458 ,13122,118098};// Mang diem tan cong
+	public static int maxDepth = 6; // do sau toi da
+	public static int maxMove = 4;  // so o tiep theo dem xet toi da
+	
+	public int[] AScore = {0, 9, 54, 162 , 1458};// Mang diem tan cong ( 9x6 = 54 , 54x3 = 162, 162x9 = 1458)
+	public int[] DScore = { 0, 3, 27, 81, 729};  // Mang diem phong ngu (3x9 = 27, 9x9 = 81, 81 x 9 = 729)
+	
+	//public int[] AScore = { 0, 1, 9, 81, 729 };  // Mang diem tan cong
+	//public int[] DScore = {0, 3, 24, 192 , 1536};// Mang diem phong ngu
 	public boolean cWin = false;
 	public Point goPoint;
 	public ComputerPlayer(BoardState board) {
@@ -24,7 +27,7 @@ public class ComputerPlayer implements Player {
 	public void evalChessBoard(int player, EvalBoard eBoard) {
 		int row, col;
 		int ePC, eHuman;
-		eBoard.resetBoard();
+		eBoard.resetBoard(); // reset toan bo diem trang thai cua toan bo o co 
 		// Duyet theo hang
 		for (row = 0; row < eBoard.width; row++)
 			for (col = 0; col < eBoard.height - 4; col++) {
@@ -46,7 +49,8 @@ public class ComputerPlayer implements Player {
 									eBoard.EBoard[row][col + i] += AScore[ePC];// cho diem tan cong
 							if (ePC == 0) // eHuman khac 0
 								if (player == 2)
-									eBoard.EBoard[row][col + i] += DScore[eHuman];// cho diem phong ngu								else
+									eBoard.EBoard[row][col + i] += DScore[eHuman];// cho diem phong ngu	
+								else
 									eBoard.EBoard[row][col + i] += AScore[eHuman];// cho diem tan cong
 							if (eHuman == 4 || ePC == 4)
 								eBoard.EBoard[row][col + i] *= 2;
@@ -121,13 +125,13 @@ public class ComputerPlayer implements Player {
 		// Duyet theo duong cheo len
 		for (row = 4; row < eBoard.width; row++)
 			for (col = 0; col < eBoard.height - 4; col++) {
-				ePC = 0;
-				eHuman = 0;
+				ePC = 0; // so quan PC
+				eHuman = 0; // so quan Human
 				for (int i = 0; i < 5; i++) {
-					if (boardState.getPosition(row - i, col + i) == 1)
-						eHuman++;
-					if (boardState.getPosition(row - i, col + i) == 2)
-						ePC++;
+					if (boardState.getPosition(row - i, col + i) == 1) // neu la human
+						eHuman++; // tang so quan human
+					if (boardState.getPosition(row - i, col + i) == 2) // neu la PC
+						ePC++; // tang so quan PC
 				}
 				if (eHuman * ePC == 0 && eHuman != ePC)
 					for (int i = 0; i < 5; i++) {
@@ -161,16 +165,15 @@ public class ComputerPlayer implements Player {
 			minValue(boardState, alpha, beta, depth);
 		}
 	}
-
 	private int maxValue(BoardState state, int alpha, int beta, int depth) {
-		evalChessBoard(2, eBoard);
-		eBoard.MaxPos();  
-		int value = eBoard.evaluationBoard;
+		
+		eBoard.MaxPos();  // tinh toa do co diem cao nhat
+		int value = eBoard.evaluationBoard; // gia tri max hien tai
 		if (depth >= maxDepth) {
 			return value;
 		}
-		evalChessBoard(2, eBoard);
-		ArrayList<Point> list = new ArrayList<>();
+		evalChessBoard(2, eBoard); // danh gia diem voi nguoi choi hien tai la PC
+		ArrayList<Point> list = new ArrayList<>(); // list cac nut con
 		for (int i = 0; i < maxMove; i++) {
 			Point node = eBoard.MaxPos();
 			if(node == null)
@@ -196,14 +199,14 @@ public class ComputerPlayer implements Player {
 	}
 
 	private int minValue(BoardState state, int alpha, int beta, int depth) {
-		evalChessBoard(1, eBoard);
+		
 		eBoard.MaxPos();
 		int value = eBoard.evaluationBoard;
 		if (depth >= maxDepth) {
 			return value;
 		}
-		evalChessBoard(1, eBoard);
-		ArrayList<Point> list = new ArrayList<>();
+		
+		ArrayList<Point> list = new ArrayList<>(); // list cac nut con 
 		for (int i = 0; i < maxMove; i++) {
 			Point node = eBoard.MaxPos();
 			if(node==null)
@@ -256,7 +259,7 @@ public class ComputerPlayer implements Player {
 //		}
 //	}
 
-
+	// tinh toan nuoc di
 	public Point AI(int player) {
 		depth = 0;
 		alphaBeta(0, 1,2 ,player);

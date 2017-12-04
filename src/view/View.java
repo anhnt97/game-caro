@@ -60,7 +60,7 @@ public class View implements EventHandler<ActionEvent> {
 			BoardState boardState = new BoardState(WIDTH_BOARD, HEIGHT_BOARD);
 			controller = new Controller();
 			controller.setView(this);
-			//Player player = new PlayerHuman(boardState);
+			//Player player = new HumanPlayer(boardState);
 			Player computer = new ComputerPlayer(boardState);
 			controller.setPlayer(computer);
 				

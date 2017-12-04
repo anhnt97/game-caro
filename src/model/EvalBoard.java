@@ -5,7 +5,7 @@ package model;
 public class EvalBoard {
 	public int height, width;
 	public int[][] EBoard;
-
+	public int evaluationBoard = 0;
 	public EvalBoard(int height, int width) {
 		this.height = height;
 		this.width = width;
@@ -22,9 +22,8 @@ public class EvalBoard {
 	public void setPosition(int x, int y, int diem) {
 		EBoard[x][y] = diem;
 	}
-
 	public Point MaxPos() {
-		int Max = 0;
+		int Max = 0; // diem max 
 		Point p = new Point();
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
@@ -41,7 +40,7 @@ public class EvalBoard {
 		evaluationBoard = Max;
 		return p;
 	}
-	public int evaluationBoard = 0;
+	
 	
 	public void pr(int[][] a) {
 		for (int i = 0; i < a.length; i++) {
