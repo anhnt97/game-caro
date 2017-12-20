@@ -35,7 +35,6 @@ import view.View;
 public class Controller implements IController {
 	public View view; 
 	private Player player;
-	private int x1,y1;
 	private Stack<Point> stack; // ngan xep luu cac nuoc da di
 	private Class<?> classImg ; //  lay anh quan co
 	private InputStream o;
@@ -51,15 +50,13 @@ public class Controller implements IController {
 	}
 
 	private void getComponents() {
-		x1 = 0;
-		y1 = 0;
 		end = false;
 		tongNuocDi = 0;
 		playerWin = "";
 		stack = new Stack<>();
 		classImg = this.getClass();
-		o = classImg.getResourceAsStream("/icon/o.png");
-		x = classImg.getResourceAsStream("/icon/x.png");
+		o = classImg.getResourceAsStream("/image/o.png");
+		x = classImg.getResourceAsStream("/image/x.png");
 		imageO = new Image(o);
 		imageX = new Image(x);
 	}
@@ -141,10 +138,8 @@ public class Controller implements IController {
 	}
 
 
-	private void danhCo(int x, int y, int player, Button[][] arrayButtonChess) {
+	public void danhCo(int x, int y, int player, Button[][] arrayButtonChess) {
 		getBoardState().setPosition(x, y, player);
-		x1 = x;
-		y1 = y;
 		if (player == 1) {
 			arrayButtonChess[x][y].setGraphic(new ImageView(imageX));
 			Point point = new Point(x, y);
@@ -224,9 +219,7 @@ public class Controller implements IController {
 		}
 
 	}
-
 	Queue<Point> queue;
-	
 	public boolean load(File file) {
 		if (file != null) {
 			queue = new LinkedList<>();

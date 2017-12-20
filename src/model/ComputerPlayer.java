@@ -12,11 +12,11 @@ public class ComputerPlayer implements Player {
 	public static int maxDepth = 6; // do sau toi da
 	public static int maxMove = 4;  // so o tiep theo dem xet toi da
 	
-	public int[] AScore = {0, 9, 54, 162 , 1458};// Mang diem tan cong ( 9x6 = 54 , 54x3 = 162, 162x9 = 1458)
-	public int[] DScore = { 0, 3, 27, 81, 729};  // Mang diem phong ngu (3x9 = 27, 9x9 = 81, 81 x 9 = 729)
+	public int[] AScore = {0,4,27,256,1458};// Mang diem tan cong 0,4,28,256,2308
+	public int[] DScore = {0,2,9,99,769};  // Mang diem phong ngu 0,1,9,85,769
 	
-	//public int[] AScore = { 0, 1, 9, 81, 729 };  // Mang diem tan cong
-	//public int[] DScore = {0, 3, 24, 192 , 1536};// Mang diem phong ngu
+	//public int[] AScore = { 0, 9, 54, 169, 1458 };  // Mang diem tan cong
+	//public int[] DScore = {0, 3, 27, 99, 729};// Mang diem phong ngu
 	public boolean cWin = false;
 	public Point goPoint;
 	public ComputerPlayer(BoardState board) {
@@ -39,6 +39,7 @@ public class ComputerPlayer implements Player {
 					if (boardState.getPosition(row, col + i) == 2) // neu quan do la cua pc
 						ePC++;
 				}
+				// trong vong 5 o khong co quan dich
 				if (eHuman * ePC == 0 && eHuman != ePC)
 					for (int i = 0; i < 5; i++) {
 						if (boardState.getPosition(row, col + i) == 0) { // neu o chua danh
@@ -155,7 +156,6 @@ public class ComputerPlayer implements Player {
 
 	}
 
-	int depth = 0;
 	// thuat toan alpha-beta
 	public void alphaBeta(int alpha, int beta, int depth, int player) {
 		if(player==2){
@@ -229,39 +229,9 @@ public class ComputerPlayer implements Player {
 	}
 
 	
-//	private ArrayList<Point> listEmty(){
-//		ArrayList<Point> list = new ArrayList<>();
-//		for (int i = 0; i < boardState.width; i++) {
-//			for (int j = 0; j < boardState.height; j++) {
-//				if (boardState.getPosition(i, j) == 0) {
-//					list.add(new Point(i, j));
-//				}
-//			}
-//		}
-//		return list;
-//	}
-//
-//	private Point randomNuocCo() {
-//		List<Point> ran = new ArrayList<>();
-//		for (int i = 0; i < boardState.width; i++) {
-//			for (int j = 0; j < boardState.height; j++) {
-//				if (boardState.getPosition(i, j) == 0) {
-//					ran.add(new Point(i, j));
-//				}
-//			}
-//		}
-//		if (!ran.isEmpty()) {
-//			Random rd = new Random();
-//			int p = rd.nextInt(ran.size());
-//			return ran.get(p);
-//		} else {
-//			return null;
-//		}
-//	}
 
 	// tinh toan nuoc di
 	public Point AI(int player) {
-		depth = 0;
 		alphaBeta(0, 1,2 ,player);
 		Point temp = goPoint;
 		if (temp != null) {
@@ -269,6 +239,18 @@ public class ComputerPlayer implements Player {
 			_y = temp.y;
 		}
 		return new Point(_x, _y);
+	}
+	public int[] getAScore() {
+		return AScore;
+	}
+	public void setAScore(int[] aScore) {
+		AScore = aScore;
+	}
+	public int[] getDScore() {
+		return DScore;
+	}
+	public void setDScore(int[] dScore) {
+		DScore = dScore;
 	}
 
 	@Override

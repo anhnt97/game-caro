@@ -4,11 +4,9 @@
 package view;
 
 import java.io.InputStream;
-
-import javax.swing.JOptionPane;
+import java.util.Optional;
 
 import controller.Controller;
-import controller.IController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.image.Image;
@@ -43,8 +42,10 @@ public class View implements EventHandler<ActionEvent> {
 	private Button btnSave;
 	private Button btnAbout;
 	private Labeled timePlayer1, timePlayer2;
+	private BoardState boardState ;
+	private ComputerPlayer computer ;
 	// lop dieu khien
-	IController controller;
+	Controller controller;
 	// mang quan co khi danh
 	public Button[][] arrayButtonChess;
 	// khung view
@@ -57,11 +58,10 @@ public class View implements EventHandler<ActionEvent> {
 		try {
 			View.primaryStage = primaryStage;
 			arrayButtonChess = new Button[WIDTH_BOARD][HEIGHT_BOARD];
-			BoardState boardState = new BoardState(WIDTH_BOARD, HEIGHT_BOARD);
+			boardState = new BoardState(WIDTH_BOARD, HEIGHT_BOARD);
+			computer = new ComputerPlayer(boardState);
 			controller = new Controller();
 			controller.setView(this);
-			//Player player = new HumanPlayer(boardState);
-			Player computer = new ComputerPlayer(boardState);
 			controller.setPlayer(computer);
 				
 			BorderPane borderPane = new BorderPane();
@@ -110,7 +110,7 @@ public class View implements EventHandler<ActionEvent> {
 		AnchorPane anchorPaneLogo = new AnchorPane();
 		AnchorPane anchorPaneMenu = new AnchorPane();
 		// set logo
-		InputStream input = clazz.getResourceAsStream("/icon/Logo.jpg");
+		InputStream input = clazz.getResourceAsStream("/image/Logo.jpg");
 		Image image = new Image(input);
 		ImageView imgView = new ImageView(image);
 		imgView.setFitHeight(230);
@@ -231,11 +231,13 @@ public class View implements EventHandler<ActionEvent> {
 	}
 	// che do dau voi may
 	public void replayComputer() {
+		
 		controller.setEnd(false);
 		controller.setTimePlayer(timePlayer1, timePlayer2);
 		controller.setPlayer(new ComputerPlayer(new BoardState(WIDTH_BOARD, HEIGHT_BOARD)));
-		controller.setPlayerFlag(1);
 		controller.reset(arrayButtonChess);
+		gameMode();
+		
 	}
 	// che do 2 nguoi choi
 	public void replayHuman() {
@@ -254,5 +256,22 @@ public class View implements EventHandler<ActionEvent> {
 		alert.setContentText("1. Nguyễn Tuấn Anh \n2. Trần Sách Hải \n Chúc các bạn chơi game vui vẻ !");
 		alert.showAndWait();
 	}
-
+	// xet xem ai di truoc
+	public void gameMode() {
+		Alert gameMode = new Alert(AlertType.CONFIRMATION);
+		gameMode.setTitle("Chọn người chơi trước");
+		gameMode.setHeaderText("Bạn có muốn chơi trước không ?");
+		Optional<ButtonType> result = gameMode.showAndWait();
+		if(result.get() == ButtonType.CANCEL) {
+			controller.danhCo(WIDTH_BOARD/2 - 1, HEIGHT_BOARD/2,2, arrayButtonChess);
+			int[] AScore = {0,3,28,256,2308}; // 0,9,54,162,1458
+			int[] DScore = {0,1,9,85,769};   // 0,3,27,99,729
+			computer.setAScore(AScore);
+			computer.setDScore(DScore);
+			controller.setPlayerFlag(1);
+		}
+		else {
+			controller.setPlayerFlag(1);
+		}
+	}
 }
